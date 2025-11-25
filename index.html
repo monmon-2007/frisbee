@@ -392,11 +392,11 @@
     </div>
     
     <script>
-        // Configuration
+        // Configuration - EDIT THESE VALUES
         let CONFIG = {
-            githubToken: '',
-            gistId: '',
-            adminPassword: ''
+            githubToken: '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',  // Replace with your GitHub token
+            gistId: '07f5b26d374e71816148a5d4e927f83a',            // Replace with your Gist ID
+            adminPassword: 'mina'     // Replace with your chosen admin password
         };
         
         // Sample dishes with images
@@ -439,8 +439,9 @@
         
         // Initialize
         function init() {
-            loadConfig();
-            if (!CONFIG.githubToken || !CONFIG.gistId) {
+            // Check if config is set
+            if (CONFIG.githubToken === 'YOUR_GITHUB_TOKEN_HERE' || 
+                CONFIG.gistId === 'YOUR_GIST_ID_HERE') {
                 showSection('setupSection');
             } else {
                 showSection('loginSection');
@@ -449,33 +450,11 @@
         }
         
         function loadConfig() {
-            const saved = localStorage.getItem('potluckConfig');
-            if (saved) {
-                CONFIG = JSON.parse(saved);
-            }
+            // Config is now hardcoded, no need to load from localStorage
         }
         
         function saveConfig() {
-            const token = document.getElementById('githubToken').value.trim();
-            const gistId = document.getElementById('gistId').value.trim();
-            const password = document.getElementById('adminPassword').value.trim();
-            
-            if (!token || !gistId || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            CONFIG = { githubToken: token, gistId: gistId, adminPassword: password };
-            localStorage.setItem('potluckConfig', JSON.stringify(CONFIG));
-            
-            // Initialize the gist with default data
-            initializeGist().then(() => {
-                alert('Configuration saved! You can now start voting.');
-                showSection('loginSection');
-            }).catch(err => {
-                alert('Error initializing Gist. Please check your token and Gist ID.');
-                console.error(err);
-            });
+            alert('Please edit the CONFIG values directly in the code at the top of the script section.');
         }
         
         async function initializeGist() {
