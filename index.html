@@ -13,32 +13,76 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 50%, #c41e3a 100%);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "🥏";
+            position: fixed;
+            font-size: 60px;
+            opacity: 0.1;
+            animation: float 20s infinite;
+            top: 10%;
+            left: 10%;
+        }
+        
+        body::after {
+            content: "🎄";
+            position: fixed;
+            font-size: 60px;
+            opacity: 0.1;
+            animation: float 25s infinite reverse;
+            bottom: 10%;
+            right: 10%;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
         
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid #FFD700;
+            position: relative;
+        }
+        
+        .container::before {
+            content: "🥏 🎅 🥏 ⛄ 🥏 🎄 🥏 🎁 🥏";
+            display: block;
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            letter-spacing: 10px;
         }
         
         h1 {
-            color: #667eea;
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 50%, #c41e3a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-align: center;
             margin-bottom: 10px;
             font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         
         .subtitle {
             text-align: center;
-            color: #666;
+            color: #165B33;
             margin-bottom: 30px;
             font-size: 1.1em;
+            font-weight: 600;
         }
         
         .login-section, .voting-section, .results-section, .setup-section {
@@ -72,7 +116,8 @@
         
         input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #c41e3a;
+            box-shadow: 0 0 10px rgba(196, 30, 58, 0.2);
         }
         
         textarea {
@@ -81,7 +126,7 @@
         }
         
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 100%);
             color: white;
             border: none;
             padding: 14px 30px;
@@ -90,11 +135,12 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             font-weight: 600;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
         }
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.5);
         }
         
         .btn:disabled {
@@ -109,16 +155,19 @@
         }
         
         .dish-card {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f8f0 100%);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            border: 2px solid #e0e0e0;
-            transition: border-color 0.3s;
+            border: 2px solid #FFD700;
+            transition: border-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .dish-card:hover {
-            border-color: #667eea;
+            border-color: #c41e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.2);
         }
         
         .dish-image {
@@ -131,44 +180,55 @@
         
         .dish-name {
             font-size: 1.3em;
-            color: #333;
+            color: #165B33;
             margin-bottom: 5px;
             font-weight: 600;
         }
         
         .dish-contributor {
-            color: #666;
+            color: #c41e3a;
             margin-bottom: 15px;
             font-style: italic;
+            font-weight: 500;
         }
         
         .stars {
             display: flex;
             gap: 8px;
             margin-bottom: 10px;
+            align-items: center;
         }
         
-        .star {
-            font-size: 30px;
+        .vote-checkbox {
+            width: 24px;
+            height: 24px;
             cursor: pointer;
-            color: #ddd;
-            transition: color 0.2s, transform 0.2s;
+            accent-color: #c41e3a;
         }
         
-        .star:hover {
-            transform: scale(1.2);
+        .vote-label {
+            font-weight: 600;
+            color: #165B33;
+            cursor: pointer;
+            user-select: none;
         }
         
-        .star.selected {
-            color: #ffd700;
+        .selected-badge {
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
         }
         
         .user-info {
             text-align: center;
             margin-bottom: 30px;
             padding: 15px;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #fff5f5 0%, #f0f8f0 100%);
             border-radius: 8px;
+            border: 2px solid #FFD700;
         }
         
         .results-list {
@@ -239,8 +299,9 @@
         .loading {
             text-align: center;
             padding: 20px;
-            color: #667eea;
+            color: #165B33;
             font-weight: 600;
+            font-size: 1.1em;
         }
         
         .image-preview {
@@ -273,8 +334,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎄 Christmas Potluck Voting 🎄</h1>
-        <p class="subtitle">Rate your favorite dishes!</p>
+        <h1>🥏 Frisbee Christmas Potluck 🎄</h1>
+        <p class="subtitle">Pick your top 3 Main Dishes & top 3 Desserts!</p>
         
         <!-- Setup Section (First Time Only) -->
         <div class="setup-section" id="setupSection">
@@ -343,9 +404,23 @@
         <div class="voting-section" id="votingSection">
             <div class="user-info">
                 <p>Welcome, <strong id="userName"></strong>!</p>
+                <p style="margin-top: 10px; color: #c41e3a; font-weight: 600;">
+                    Main Dishes: <span id="mainVotesRemaining">3</span> votes remaining | 
+                    Desserts: <span id="dessertVotesRemaining">3</span> votes remaining
+                </p>
             </div>
-            <div id="loadingDishes" class="loading">Loading dishes...</div>
-            <div id="dishList"></div>
+            
+            <h2 style="color: #c41e3a; margin-top: 20px; margin-bottom: 15px; border-bottom: 3px solid #FFD700; padding-bottom: 10px;">
+                🍖 Main Dishes (Select 3)
+            </h2>
+            <div id="loadingMainDishes" class="loading">Loading main dishes...</div>
+            <div id="mainDishList"></div>
+            
+            <h2 style="color: #165B33; margin-top: 40px; margin-bottom: 15px; border-bottom: 3px solid #FFD700; padding-bottom: 10px;">
+                🍰 Desserts (Select 3)
+            </h2>
+            <div id="loadingDesserts" class="loading">Loading desserts...</div>
+            <div id="dessertList"></div>
             <div class="button-group">
                 <button class="btn" onclick="submitVotes()" id="submitBtn">Submit Votes</button>
                 <button class="btn btn-secondary" onclick="logout()">Logout</button>
@@ -358,7 +433,11 @@
                 <p>Admin View - Voting Results</p>
             </div>
             <div id="loadingResults" class="loading">Loading results...</div>
-            <div id="resultsList" class="results-list"></div>
+            <h2 style="color: #c41e3a; margin-bottom: 15px;">🍖 Main Dishes Rankings</h2>
+            <div id="mainResultsList" class="results-list"></div>
+            
+            <h2 style="color: #165B33; margin-top: 40px; margin-bottom: 15px;">🍰 Desserts Rankings</h2>
+            <div id="dessertResultsList" class="results-list"></div>
             <div class="button-group">
                 <button class="btn btn-secondary" onclick="backToVoting()">Back to Voting</button>
                 <button class="btn" onclick="exportResults()">Export Results</button>
@@ -370,6 +449,13 @@
                 <h2>Admin Controls</h2>
                 <div class="add-dish-form">
                     <h3>Add New Dish</h3>
+                    <div class="input-group">
+                        <label for="newDishCategory">Category</label>
+                        <select id="newDishCategory" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                            <option value="main">Main Dish</option>
+                            <option value="dessert">Dessert</option>
+                        </select>
+                    </div>
                     <div class="input-group">
                         <label for="newDishName">Dish Name</label>
                         <input type="text" id="newDishName" placeholder="e.g., Apple Pie">
@@ -402,43 +488,72 @@
             adminPassword: 'mina'     // Replace with your chosen admin password
         };
         
+        // Allowed voters - EDIT THIS LIST
+        // Add names in format: "FirstName LastName" (case-insensitive)
+        const ALLOWED_VOTERS = [
+            "John Smith",
+            "Jane Doe",
+            "Mike Chen",
+            "Sarah Johnson",
+            "Emily Davis",
+            "Tom Wilson",
+            "Lisa Brown",
+            "David Lee",
+            "Maria Garcia",
+            "Chris Taylor"
+        ];
+        
         // Sample dishes with images
         let dishes = [
             { 
                 id: 1, 
                 name: "Honey Glazed Ham", 
                 contributor: "Sarah Johnson",
-                image: "https://images.unsplash.com/photo-1545251223-0f73eb45bdfd?w=400"
+                image: "https://images.unsplash.com/photo-1545251223-0f73eb45bdfd?w=400",
+                category: "main"
             },
             { 
                 id: 2, 
                 name: "Mac and Cheese", 
                 contributor: "Mike Chen",
-                image: "https://images.unsplash.com/photo-1543339494-b4cd4f7ba686?w=400"
+                image: "https://images.unsplash.com/photo-1543339494-b4cd4f7ba686?w=400",
+                category: "main"
             },
             { 
                 id: 3, 
                 name: "Caesar Salad", 
                 contributor: "Emily Davis",
-                image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400"
+                image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400",
+                category: "main"
             },
             { 
                 id: 4, 
                 name: "Chocolate Cake", 
                 contributor: "Tom Wilson",
-                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400"
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400",
+                category: "dessert"
             },
             { 
                 id: 5, 
-                name: "Garlic Bread", 
+                name: "Apple Pie", 
                 contributor: "Lisa Brown",
-                image: "https://images.unsplash.com/photo-1573140401552-388e4c7c58e1?w=400"
+                image: "https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=400",
+                category: "dessert"
+            },
+            { 
+                id: 6, 
+                name: "Tiramisu", 
+                contributor: "Maria Garcia",
+                image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400",
+                category: "dessert"
             }
         ];
         
         let currentUser = null;
-        let currentVotes = {};
+        let currentMainVotes = [];  // Votes for main dishes
+        let currentDessertVotes = [];  // Votes for desserts
         let allVotesData = { votes: {}, dishes: [] };
+        const MAX_VOTES = 3;
         
         // Initialize
         function init() {
@@ -538,303 +653,440 @@
                 return;
             }
             
+            const fullName = firstName + ' ' + lastName;
+            
             // Check for admin login
             if (firstName.toLowerCase() === 'admin' && lastName === CONFIG.adminPassword) {
                 await showResults();
                 return;
             }
             
+            // Check if name is in allowed list (case-insensitive)
+            const isAllowed = ALLOWED_VOTERS.some(name => 
+                name.toLowerCase() === fullName.toLowerCase()
+            );
+            
+            if (!isAllowed) {
+                alert('Sorry, your name is not on the registered voter list. Please check your spelling or contact the organizer.');
+                return;
+            }
+            
             currentUser = {
                 id: firstName.toLowerCase() + '_' + lastName.toLowerCase(),
-                name: firstName + ' ' + lastName
+                name: fullName
             };
             
-            document.getElementById('userName').textContent = currentUser.name;
-            
-            // Load user's previous votes if any
+            // Check if user has already voted
             try {
                 const data = await fetchGist();
                 allVotesData = data;
-                currentVotes = data.votes[currentUser.id] || {};
+                
+                if (data.votes[currentUser.id]) {
+                    const userVotes = data.votes[currentUser.id];
+                    const hasVoted = (Array.isArray(userVotes.main) && userVotes.main.length > 0) || 
+                                    (Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0);
+                    if (hasVoted) {
+                        alert('You have already submitted your votes! Each person can only vote once.');
+                        currentUser = null;
+                        return;
+                    }
+                }
+                
+                currentMainVotes = [];
+                currentDessertVotes = [];
             } catch (err) {
                 console.error('Error loading votes:', err);
-                currentVotes = {};
+                currentMainVotes = [];
+                currentDessertVotes = [];
             }
             
+            document.getElementById('userName').textContent = currentUser.name;
             showSection('votingSection');
             await renderDishes();
         }
         
         function logout() {
             currentUser = null;
-            currentVotes = {};
+            currentMainVotes = [];
+            currentDessertVotes = [];
             document.getElementById('firstName').value = '';
             document.getElementById('lastName').value = '';
             showSection('loginSection');
         }
         
+        function updateVotesRemaining() {
+            const mainRemaining = MAX_VOTES - currentMainVotes.length;
+            const dessertRemaining = MAX_VOTES - currentDessertVotes.length;
+            document.getElementById('mainVotesRemaining').textContent = mainRemaining;
+            document.getElementById('dessertVotesRemaining').textContent = dessertRemaining;
+        }
+        
         async function renderDishes() {
-            const dishList = document.getElementById('dishList');
-            const loading = document.getElementById('loadingDishes');
+            const mainDishList = document.getElementById('mainDishList');
+            const dessertList = document.getElementById('dessertList');
+            const loadingMain = document.getElementById('loadingMainDishes');
+            const loadingDesserts = document.getElementById('loadingDesserts');
             
             try {
                 const data = await fetchGist();
                 dishes = data.dishes || dishes;
                 
-                loading.style.display = 'none';
-                dishList.innerHTML = '';
+                loadingMain.style.display = 'none';
+                loadingDesserts.style.display = 'none';
+                mainDishList.innerHTML = '';
+                dessertList.innerHTML = '';
                 
-                dishes.forEach(dish => {
-                    const card = document.createElement('div');
-                    card.className = 'dish-card';
-                    
-                    const userRating = currentVotes[dish.id] || 0;
-                    
-                    const imageHtml = dish.image ? 
-                        `<img src="${dish.image}" alt="${dish.name}" class="dish-image" onerror="this.style.display='none'">` : '';
-                    
-                    card.innerHTML = `
-                        ${imageHtml}
-                        <div class="dish-name">${dish.name}</div>
-                        <div class="dish-contributor">Brought by ${dish.contributor}</div>
-                        <div class="stars" data-dish-id="${dish.id}">
-                            ${[1, 2, 3, 4, 5].map(rating => 
-                                `<span class="star ${rating <= userRating ? 'selected' : ''}" data-rating="${rating}">★</span>`
-                            ).join('')}
-                        </div>
-                    `;
-                    
-                    dishList.appendChild(card);
+                // Separate dishes by category
+                const mainDishes = dishes.filter(d => d.category === 'main');
+                const desserts = dishes.filter(d => d.category === 'dessert');
+                
+                // Render main dishes
+                mainDishes.forEach(dish => {
+                    const card = createDishCard(dish, currentMainVotes, 'main');
+                    mainDishList.appendChild(card);
                 });
                 
-                // Add click handlers to stars
-                document.querySelectorAll('.stars').forEach(starsDiv => {
-                    starsDiv.addEventListener('click', function(e) {
-                        if (e.target.classList.contains('star')) {
-                            const dishId = parseInt(this.dataset.dishId);
-                            const rating = parseInt(e.target.dataset.rating);
-                            setRating(dishId, rating, this);
-                        }
+                // Render desserts
+                desserts.forEach(dish => {
+                    const card = createDishCard(dish, currentDessertVotes, 'dessert');
+                    dessertList.appendChild(card);
+                });
+                
+                // Add change handlers to checkboxes
+                document.querySelectorAll('.vote-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function(e) {
+                        const dishId = parseInt(this.dataset.dishId);
+                        const category = this.dataset.category;
+                        toggleVote(dishId, category, this);
                     });
                 });
+                
+                updateVotesRemaining();
             } catch (err) {
-                loading.textContent = 'Error loading dishes. Please refresh.';
+                loadingMain.textContent = 'Error loading dishes. Please refresh.';
+                loadingDesserts.textContent = 'Error loading dishes. Please refresh.';
                 console.error(err);
             }
         }
         
-        function setRating(dishId, rating, starsDiv) {
-            currentVotes[dishId] = rating;
+        function createDishCard(dish, voteArray, category) {
+            const card = document.createElement('div');
+            card.className = 'dish-card';
             
-            // Update visual feedback
-            const stars = starsDiv.querySelectorAll('.star');
-            stars.forEach((star, index) => {
-                if (index < rating) {
-                    star.classList.add('selected');
+            const isSelected = voteArray.includes(dish.id);
+            
+            const imageHtml = dish.image ? 
+                `<img src="${dish.image}" alt="${dish.name}" class="dish-image" onerror="this.style.display='none'">` : '';
+            
+            card.innerHTML = `
+                ${imageHtml}
+                <div class="dish-name">${dish.name}</div>
+                <div class="dish-contributor">Brought by ${dish.contributor}</div>
+                <div class="stars">
+                    <input type="checkbox" 
+                           id="vote-${dish.id}" 
+                           class="vote-checkbox" 
+                           data-dish-id="${dish.id}"
+                           data-category="${category}"
+                           ${isSelected ? 'checked' : ''}>
+                    <label for="vote-${dish.id}" class="vote-label">
+                        ${isSelected ? '<span class="selected-badge">✓ Selected</span>' : 'Select as Top 3'}
+                    </label>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function toggleVote(dishId, category, checkbox) {
+            const voteArray = category === 'main' ? currentMainVotes : currentDessertVotes;
+            const categoryName = category === 'main' ? 'main dishes' : 'desserts';
+            
+            if (checkbox.checked) {
+                // Trying to add a vote
+                if (voteArray.length >= MAX_VOTES) {
+                    checkbox.checked = false;
+                    alert(`You can only select ${MAX_VOTES} ${categoryName}!`);
+                    return;
+                }
+                voteArray.push(dishId);
+            } else {
+                // Removing a vote
+                const index = voteArray.indexOf(dishId);
+                if (index > -1) {
+                    voteArray.splice(index, 1);
+                }
+            }
+            
+            // Update the label
+            const label = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                label.innerHTML = '<span class="selected-badge">✓ Selected</span>';
+            } else {
+                label.innerHTML = 'Select as Top 3';
+            }
+            
+            updateVotesRemaining();
+        }
+        function setRating(dishId, rating, starsDiv) {
+        // This function is no longer needed but kept for compatibility
+    }
+    
+    async function submitVotes() {
+        if (currentMainVotes.length === 0 && currentDessertVotes.length === 0) {
+            alert('Please select at least one item before submitting!');
+            return;
+        }
+        
+        if (currentMainVotes.length > MAX_VOTES || currentDessertVotes.length > MAX_VOTES) {
+            alert(`Please select only ${MAX_VOTES} items per category!`);
+            return;
+        }
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        try {
+            // Fetch current data
+            const data = await fetchGist();
+            
+            // Update with user's votes (separate arrays for main and dessert)
+            data.votes[currentUser.id] = {
+                main: currentMainVotes,
+                dessert: currentDessertVotes
+            };
+            
+            // Save back to gist
+            await updateGist(data);
+            
+            alert(`Thank you for voting! You selected ${currentMainVotes.length} main dish${currentMainVotes.length !== 1 ? 'es' : ''} and ${currentDessertVotes.length} dessert${currentDessertVotes.length !== 1 ? 's' : ''}.`);
+            logout();
+        } catch (err) {
+            alert('Error submitting votes. Please try again.');
+            console.error(err);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Votes';
+        }
+    }
+    
+    async function showResults() {
+        showSection('resultsSection');
+        await calculateAndDisplayResults();
+    }
+    
+    async function calculateAndDisplayResults() {
+        const loading = document.getElementById('loadingResults');
+        const mainResultsList = document.getElementById('mainResultsList');
+        const dessertResultsList = document.getElementById('dessertResultsList');
+        
+        loading.style.display = 'block';
+        mainResultsList.innerHTML = '';
+        dessertResultsList.innerHTML = '';
+        
+        try {
+            const data = await fetchGist();
+            const allVotes = data.votes || {};
+            const currentDishes = data.dishes || dishes;
+            
+            const mainResults = [];
+            const dessertResults = [];
+            
+            currentDishes.forEach(dish => {
+                let voteCount = 0;
+                
+                // Count votes for this dish
+                Object.values(allVotes).forEach(userVotes => {
+                    if (dish.category === 'main' && Array.isArray(userVotes.main) && userVotes.main.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.includes(dish.id)) {
+                        voteCount++;
+                    }
+                });
+                
+                const result = {
+                    name: dish.name,
+                    contributor: dish.contributor,
+                    voteCount: voteCount
+                };
+                
+                if (dish.category === 'main') {
+                    mainResults.push(result);
                 } else {
-                    star.classList.remove('selected');
+                    dessertResults.push(result);
                 }
             });
+            
+            // Sort both arrays by vote count
+            mainResults.sort((a, b) => b.voteCount - a.voteCount);
+            dessertResults.sort((a, b) => b.voteCount - a.voteCount);
+            
+            loading.style.display = 'none';
+            
+            // Display main dish results
+            mainResults.forEach((result, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="result-name">${medal} ${index + 1}. ${result.name}</div>
+                        <div style="color: #666; font-size: 0.9em;">by ${result.contributor}</div>
+                    </div>
+                    <div class="result-rating">${result.voteCount} vote${result.voteCount !== 1 ? 's' : ''}</div>
+                `;
+                mainResultsList.appendChild(item);
+            });
+            
+            // Display dessert results
+            dessertResults.forEach((result, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="result-name">${medal} ${index + 1}. ${result.name}</div>
+                        <div style="color: #666; font-size: 0.9em;">by ${result.contributor}</div>
+                    </div>
+                    <div class="result-rating">${result.voteCount} vote${result.voteCount !== 1 ? 's' : ''}</div>
+                `;
+                dessertResultsList.appendChild(item);
+            });
+            
+            // Show total voters
+            const totalVoters = Object.keys(allVotes).length;
+            const registeredVoters = ALLOWED_VOTERS.length;
+            const voterInfo = document.createElement('div');
+            voterInfo.style.cssText = 'text-align: center; margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-weight: 600;';
+            voterInfo.innerHTML = `
+                <div>Votes Submitted: ${totalVoters} / ${registeredVoters} registered voters</div>
+                <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                    Participation Rate: ${Math.round((totalVoters / registeredVoters) * 100)}%
+                </div>
+            `;
+            dessertResultsList.appendChild(voterInfo);
+        } catch (err) {
+            loading.textContent = 'Error loading results. Please refresh.';
+            console.error(err);
+        }
+    }
+    
+    async function refreshResults() {
+        await calculateAndDisplayResults();
+    }
+    
+    function backToVoting() {
+        showSection('loginSection');
+    }
+    
+    async function exportResults() {
+        try {
+            const data = await fetchGist();
+            const allVotes = data.votes || {};
+            const currentDishes = data.dishes || dishes;
+            
+            const mainResults = [];
+            const dessertResults = [];
+            
+            currentDishes.forEach(dish => {
+                let voteCount = 0;
+                
+                Object.values(allVotes).forEach(userVotes => {
+                    if (dish.category === 'main' && Array.isArray(userVotes.main) && userVotes.main.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.includes(dish.id)) {
+                        voteCount++;
+                    }
+                });
+                
+                const result = {
+                    Dish: dish.name,
+                    Contributor: dish.contributor,
+                    Votes: voteCount,
+                    Category: dish.category === 'main' ? 'Main Dish' : 'Dessert'
+                };
+                
+                if (dish.category === 'main') {
+                    mainResults.push(result);
+                } else {
+                    dessertResults.push(result);
+                }
+            });
+            
+            mainResults.sort((a, b) => b.Votes - a.Votes);
+            dessertResults.sort((a, b) => b.Votes - a.Votes);
+            
+            // Create CSV
+            const csv = [
+                ['MAIN DISHES'],
+                ['Rank', 'Dish', 'Contributor', 'Total Votes'],
+                ...mainResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes]),
+                [],
+                ['DESSERTS'],
+                ['Rank', 'Dish', 'Contributor', 'Total Votes'],
+                ...dessertResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes])
+            ].map(row => row.join(',')).join('\n');
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'potluck-results.csv';
+            a.click();
+        } catch (err) {
+            alert('Error exporting results');
+            console.error(err);
+        }
+    }
+    
+    async function addDish() {
+        const name = document.getElementById('newDishName').value.trim();
+        const contributor = document.getElementById('newDishContributor').value.trim();
+        const image = document.getElementById('newDishImage').value.trim();
+        const category = document.getElementById('newDishCategory').value;
+        
+        if (!name || !contributor) {
+            alert('Please enter both dish name and contributor');
+            return;
         }
         
-        async function submitVotes() {
-            if (Object.keys(currentVotes).length === 0) {
-                alert('Please rate at least one dish before submitting!');
-                return;
-            }
+        try {
+            const data = await fetchGist();
+            const newId = Math.max(...data.dishes.map(d => d.id), 0) + 1;
+            data.dishes.push({ id: newId, name, contributor, image, category });
             
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
+            await updateGist(data);
             
-            try {
-                // Fetch current data
-                const data = await fetchGist();
-                
-                // Update with user's votes
-                data.votes[currentUser.id] = currentVotes;
-                
-                // Save back to gist
-                await updateGist(data);
-                
-                alert('Thank you for voting! Your votes have been submitted.');
-                logout();
-            } catch (err) {
-                alert('Error submitting votes. Please try again.');
-                console.error(err);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Votes';
-            }
-        }
-        
-        async function showResults() {
-            showSection('resultsSection');
+            document.getElementById('newDishName').value = '';
+            document.getElementById('newDishContributor').value = '';
+            document.getElementById('newDishImage').value = '';
+            document.getElementById('newDishCategory').value = 'main';
+            
+            alert('Dish added successfully!');
             await calculateAndDisplayResults();
+        } catch (err) {
+            alert('Error adding dish');
+            console.error(err);
         }
-        
-        async function calculateAndDisplayResults() {
-            const loading = document.getElementById('loadingResults');
-            const resultsList = document.getElementById('resultsList');
-            
-            loading.style.display = 'block';
-            resultsList.innerHTML = '';
-            
+    }
+    
+    async function clearAllVotes() {
+        if (confirm('Are you sure you want to clear ALL votes? This cannot be undone!')) {
             try {
                 const data = await fetchGist();
-                const allVotes = data.votes || {};
-                const currentDishes = data.dishes || dishes;
-                const results = [];
-                
-                currentDishes.forEach(dish => {
-                    let totalRating = 0;
-                    let voteCount = 0;
-                    
-                    Object.values(allVotes).forEach(userVotes => {
-                        if (userVotes[dish.id]) {
-                            totalRating += userVotes[dish.id];
-                            voteCount++;
-                        }
-                    });
-                    
-                    const avgRating = voteCount > 0 ? (totalRating / voteCount).toFixed(2) : 0;
-                    
-                    results.push({
-                        name: dish.name,
-                        contributor: dish.contributor,
-                        avgRating: parseFloat(avgRating),
-                        voteCount: voteCount,
-                        totalStars: totalRating
-                    });
-                });
-                
-                // Sort by average rating (descending)
-                results.sort((a, b) => b.avgRating - a.avgRating);
-                
-                loading.style.display = 'none';
-                resultsList.innerHTML = '<h2>Final Results</h2>';
-                
-                results.forEach((result, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'result-item';
-                    item.innerHTML = `
-                        <div>
-                            <div class="result-name">${index + 1}. ${result.name}</div>
-                            <div style="color: #666; font-size: 0.9em;">by ${result.contributor} • ${result.voteCount} votes</div>
-                        </div>
-                        <div class="result-rating">⭐ ${result.avgRating}</div>
-                    `;
-                    resultsList.appendChild(item);
-                });
-            } catch (err) {
-                loading.textContent = 'Error loading results. Please refresh.';
-                console.error(err);
-            }
-        }
-        
-        async function refreshResults() {
-            await calculateAndDisplayResults();
-        }
-        
-        function backToVoting() {
-            showSection('loginSection');
-        }
-        
-        async function exportResults() {
-            try {
-                const data = await fetchGist();
-                const allVotes = data.votes || {};
-                const currentDishes = data.dishes || dishes;
-                const results = [];
-                
-                currentDishes.forEach(dish => {
-                    let totalRating = 0;
-                    let voteCount = 0;
-                    
-                    Object.values(allVotes).forEach(userVotes => {
-                        if (userVotes[dish.id]) {
-                            totalRating += userVotes[dish.id];
-                            voteCount++;
-                        }
-                    });
-                    
-                    const avgRating = voteCount > 0 ? (totalRating / voteCount).toFixed(2) : 0;
-                    
-                    results.push({
-                        Dish: dish.name,
-                        Contributor: dish.contributor,
-                        AverageRating: avgRating,
-                        TotalVotes: voteCount
-                    });
-                });
-                
-                results.sort((a, b) => b.AverageRating - a.AverageRating);
-                
-                // Create CSV
-                const csv = [
-                    ['Rank', 'Dish', 'Contributor', 'Average Rating', 'Total Votes'],
-                    ...results.map((r, i) => [i + 1, r.Dish, r.Contributor, r.AverageRating, r.TotalVotes])
-                ].map(row => row.join(',')).join('\n');
-                
-                // Download
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'potluck-results.csv';
-                a.click();
-            } catch (err) {
-                alert('Error exporting results');
-                console.error(err);
-            }
-        }
-        
-        async function addDish() {
-            const name = document.getElementById('newDishName').value.trim();
-            const contributor = document.getElementById('newDishContributor').value.trim();
-            const image = document.getElementById('newDishImage').value.trim();
-            
-            if (!name || !contributor) {
-                alert('Please enter both dish name and contributor');
-                return;
-            }
-            
-            try {
-                const data = await fetchGist();
-                const newId = Math.max(...data.dishes.map(d => d.id), 0) + 1;
-                data.dishes.push({ id: newId, name, contributor, image });
-                
+                data.votes = {};
                 await updateGist(data);
-                
-                document.getElementById('newDishName').value = '';
-                document.getElementById('newDishContributor').value = '';
-                document.getElementById('newDishImage').value = '';
-                
-                alert('Dish added successfully!');
+                alert('All votes have been cleared.');
                 await calculateAndDisplayResults();
             } catch (err) {
-                alert('Error adding dish');
+                alert('Error clearing votes');
                 console.error(err);
             }
         }
-        
-        async function clearAllVotes() {
-            if (confirm('Are you sure you want to clear ALL votes? This cannot be undone!')) {
-                try {
-                    const data = await fetchGist();
-                    data.votes = {};
-                    await updateGist(data);
-                    alert('All votes have been cleared.');
-                    await calculateAndDisplayResults();
-                } catch (err) {
-                    alert('Error clearing votes');
-                    console.error(err);
-                }
-            }
-        }
-        
-        // Initialize on load
-        init();
-    </script>
-</body>
-</html>
+    }
+    
+    // Initialize on load
+    init();
+</script>
