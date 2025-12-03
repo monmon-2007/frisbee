@@ -85,11 +85,11 @@
             font-weight: 600;
         }
         
-        .login-section, .category-selection, .voting-section, .results-section, .setup-section {
+        .login-section, .category-selection, .voting-section, .results-section, .setup-section, .thankyou-section {
             display: none;
         }
         
-        .login-section.active, .category-selection.active, .voting-section.active, .results-section.active, .setup-section.active {
+        .login-section.active, .category-selection.active, .voting-section.active, .results-section.active, .setup-section.active, .thankyou-section.active {
             display: block;
         }
         
@@ -183,6 +183,10 @@
         
         .category-card.dessert h2 {
             color: #165B33;
+        }
+        
+        .category-card.sweater h2 {
+            color: #FF6B6B;
         }
         
         .category-card p {
@@ -385,6 +389,37 @@
             border-radius: 8px;
         }
         
+        .thankyou-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .thankyou-content h2 {
+            color: #c41e3a;
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+        
+        .thankyou-content p {
+            font-size: 1.3em;
+            color: #165B33;
+            margin-bottom: 30px;
+        }
+        
+        .thankyou-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -402,6 +437,11 @@
                 width: 100%;
                 margin-left: 0 !important;
                 margin-bottom: 10px;
+            }
+            
+            .voting-status {
+                flex-direction: column;
+                gap: 15px;
             }
         }
     </style>
@@ -491,6 +531,11 @@
                         <div class="status-text">Desserts</div>
                         <div id="dessertStatus" class="pending">Not Voted</div>
                     </div>
+                    <div class="status-item">
+                        <div class="status-icon">🎅</div>
+                        <div class="status-text">Ugly Sweaters</div>
+                        <div id="sweaterStatus" class="pending">Not Voted</div>
+                    </div>
                 </div>
             </div>
             
@@ -502,6 +547,11 @@
             <div class="category-card dessert" onclick="selectCategory('dessert')">
                 <h2>🍰 Vote for Desserts</h2>
                 <p>Choose your top 3 favorite desserts</p>
+            </div>
+            
+            <div class="category-card sweater" onclick="selectCategory('sweater')">
+                <h2>🎅 Vote for Ugly Christmas Sweaters</h2>
+                <p>Choose the top 3 ugliest (best!) sweaters</p>
             </div>
             
             <div class="button-group">
@@ -518,12 +568,25 @@
                 </p>
             </div>
             
-            <div id="loadingDishes" class="loading">Loading dishes...</div>
+            <div id="loadingDishes" class="loading">Loading items...</div>
             <div id="dishList"></div>
             
             <div class="button-group">
                 <button class="btn" onclick="submitVotes()" id="submitBtn">Submit Votes</button>
                 <button class="btn btn-secondary" onclick="backToCategories()">Back</button>
+            </div>
+        </div>
+        
+        <!-- Thank You Section -->
+        <div class="thankyou-section" id="thankyouSection">
+            <div class="thankyou-content">
+                <h2>🎉 Thank You for Voting! 🎉</h2>
+                <p>Your votes have been recorded. Have a Merry Christmas!</p>
+                <img src="https://github.com/monmon-2007/frisbee/blob/main/christmas_thanks_animation.gif" alt="Funny Christmas" class="thankyou-image">
+                <p style="font-size: 1em; margin-top: 20px; color: #666;">Santa approves! 🎅</p>
+                <div class="button-group" style="margin-top: 30px;">
+                    <button class="btn" onclick="logout()">Done</button>
+                </div>
             </div>
         </div>
         
@@ -533,11 +596,16 @@
                 <p>Admin View - Voting Results</p>
             </div>
             <div id="loadingResults" class="loading">Loading results...</div>
+            
             <h2 style="color: #c41e3a; margin-bottom: 15px;">🍖 Main Dishes Rankings</h2>
             <div id="mainResultsList" class="results-list"></div>
             
             <h2 style="color: #165B33; margin-top: 40px; margin-bottom: 15px;">🍰 Desserts Rankings</h2>
             <div id="dessertResultsList" class="results-list"></div>
+            
+            <h2 style="color: #FF6B6B; margin-top: 40px; margin-bottom: 15px;">🎅 Ugly Christmas Sweaters Rankings</h2>
+            <div id="sweaterResultsList" class="results-list"></div>
+            
             <div class="button-group">
                 <button class="btn btn-secondary" onclick="backToVoting()">Back to Voting</button>
                 <button class="btn" onclick="exportResults()">Export Results</button>
@@ -548,27 +616,28 @@
             <div class="admin-section">
                 <h2>Admin Controls</h2>
                 <div class="add-dish-form">
-                    <h3>Add New Dish</h3>
+                    <h3>Add New Item</h3>
                     <div class="input-group">
                         <label for="newDishCategory">Category</label>
                         <select id="newDishCategory" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
                             <option value="main">Main Dish</option>
                             <option value="dessert">Dessert</option>
+                            <option value="sweater">Ugly Sweater</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="newDishName">Dish Name</label>
-                        <input type="text" id="newDishName" placeholder="e.g., Apple Pie">
+                        <label for="newDishName">Item Name</label>
+                        <input type="text" id="newDishName" placeholder="e.g., Apple Pie or John's Sweater">
                     </div>
                     <div class="input-group">
-                        <label for="newDishContributor">Brought by</label>
+                        <label for="newDishContributor">Person's Name</label>
                         <input type="text" id="newDishContributor" placeholder="e.g., John Smith">
                     </div>
                     <div class="input-group">
                         <label for="newDishImage">Image URL (optional)</label>
                         <input type="text" id="newDishImage" placeholder="https://example.com/image.jpg">
                     </div>
-                    <button class="btn" onclick="addDish()">Add Dish</button>
+                    <button class="btn" onclick="addDish()">Add Item</button>
                 </div>
                 <div style="margin-top: 20px;">
                     <button class="btn btn-secondary" onclick="clearAllVotes()" style="background: #dc3545;">Clear All Votes</button>
@@ -593,7 +662,9 @@
         // Allowed voters - EDIT THIS LIST
         // Add names in format: "FirstName LastName" (case-insensitive)
         const ALLOWED_VOTERS = [
+            "kero Nashed",
             "Kiro Nashed",
+            "Mina Gadallah",
             "John Smith",
             "Jane Doe",
             "Mike Chen",
@@ -603,13 +674,7 @@
             "Lisa Brown",
             "David Lee",
             "Maria Garcia",
-            "Chris Taylor",
-            "George Asham",
-            "kero Nashed",
-            "Mina Gadallah",
-            "sandy Grace",
-            "John Gabrial",
-            "Becca Mina"
+            "Chris Taylor"
         ];
         
         // Sample dishes with images
@@ -655,11 +720,25 @@
                 contributor: "Maria Garcia",
                 image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400",
                 category: "dessert"
+            },
+            { 
+                id: 7, 
+                name: "Reindeer Monstrosity", 
+                contributor: "John Smith",
+                image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400",
+                category: "sweater"
+            },
+            { 
+                id: 8, 
+                name: "Light-Up Special", 
+                contributor: "Jane Doe",
+                image: "https://images.unsplash.com/photo-1574958269340-fa927503f3dd?w=400",
+                category: "sweater"
             }
         ];
         
         let currentUser = null;
-        let currentCategory = null;  // 'main' or 'dessert'
+        let currentCategory = null;  // 'main', 'dessert', or 'sweater'
         let currentVotes = [];  // Votes for current category
         let allVotesData = { votes: {}, dishes: [] };
         const MAX_VOTES = 3;
@@ -747,7 +826,7 @@
         }
         
         function showSection(sectionId) {
-            document.querySelectorAll('.login-section, .category-selection, .voting-section, .results-section, .setup-section').forEach(section => {
+            document.querySelectorAll('.login-section, .category-selection, .voting-section, .results-section, .setup-section, .thankyou-section').forEach(section => {
                 section.classList.remove('active');
             });
             document.getElementById(sectionId).classList.add('active');
@@ -761,104 +840,140 @@
                 alert('Please enter both first and last name');
                 return;
             }
-            
             const fullName = firstName + ' ' + lastName;
-            
-            // Check for admin login
-            if (firstName.toLowerCase() === 'admin' && lastName === CONFIG.adminPassword) {
-                await showResults();
-                return;
-            }
-            
-            // Check if name is in allowed list (case-insensitive)
-            const isAllowed = ALLOWED_VOTERS.some(name => 
-                name.toLowerCase() === fullName.toLowerCase()
-            );
-            
-            if (!isAllowed) {
-                alert('Sorry, your name is not on the registered voter list. Please check your spelling or contact the organizer.');
-                return;
-            }
-            
-            currentUser = {
-                id: firstName.toLowerCase() + '_' + lastName.toLowerCase(),
-                name: fullName
-            };
-            
-            // Load voting status
-            try {
-                const data = await fetchGist();
-                allVotesData = data;
-                
-                // Update status display
-                updateVotingStatus();
-                
-                document.getElementById('userName').textContent = currentUser.name;
-                showSection('categorySelection');
-            } catch (err) {
-                console.error('Error loading votes:', err);
-                document.getElementById('userName').textContent = currentUser.name;
-                showSection('categorySelection');
-            }
+        
+        // Check for admin login
+        if (firstName.toLowerCase() === 'admin' && lastName === CONFIG.adminPassword) {
+            await showResults();
+            return;
         }
         
-        function updateVotingStatus() {
-            const mainStatus = document.getElementById('mainStatus');
-            const dessertStatus = document.getElementById('dessertStatus');
+        // Check if name is in allowed list (case-insensitive)
+        const isAllowed = ALLOWED_VOTERS.some(name => 
+            name.toLowerCase() === fullName.toLowerCase()
+        );
+        
+        if (!isAllowed) {
+            alert('Sorry, your name is not on the registered voter list. Please check your spelling or contact the organizer.');
+            return;
+        }
+        
+        currentUser = {
+            id: firstName.toLowerCase() + '_' + lastName.toLowerCase(),
+            name: fullName
+        };
+        
+        // Load voting status
+        try {
+            const data = await fetchGist();
+            allVotesData = data;
             
-            if (allVotesData.votes[currentUser.id]) {
-                const userVotes = allVotesData.votes[currentUser.id];
-                
-                if (Array.isArray(userVotes.main) && userVotes.main.length > 0) {
-                    mainStatus.textContent = '✓ Voted';
-                    mainStatus.className = 'completed';
-                } else {
-                    mainStatus.textContent = 'Not Voted';
-                    mainStatus.className = 'pending';
-                }
-                
-                if (Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) {
-                    dessertStatus.textContent = '✓ Voted';
-                    dessertStatus.className = 'completed';
-                } else {
-                    dessertStatus.textContent = 'Not Voted';
-                    dessertStatus.className = 'pending';
-                }
+            // Check if user has completed all voting
+            if (hasCompletedAllVoting()) {
+                showSection('thankyouSection');
+                return;
+            }
+            
+            // Update status display
+            updateVotingStatus();
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            showSection('categorySelection');
+        } catch (err) {
+            console.error('Error loading votes:', err);
+            document.getElementById('userName').textContent = currentUser.name;
+            showSection('categorySelection');
+        }
+    }
+    
+    function hasCompletedAllVoting() {
+        if (!allVotesData.votes[currentUser.id]) return false;
+        
+        const userVotes = allVotesData.votes[currentUser.id];
+        const hasMain = Array.isArray(userVotes.main) && userVotes.main.length > 0;
+        const hasDessert = Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0;
+        const hasSweater = Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0;
+        
+        return hasMain && hasDessert && hasSweater;
+    }
+    
+    function updateVotingStatus() {
+        const mainStatus = document.getElementById('mainStatus');
+        const dessertStatus = document.getElementById('dessertStatus');
+        const sweaterStatus = document.getElementById('sweaterStatus');
+        
+        if (allVotesData.votes[currentUser.id]) {
+            const userVotes = allVotesData.votes[currentUser.id];
+            
+            if (Array.isArray(userVotes.main) && userVotes.main.length > 0) {
+                mainStatus.textContent = '✓ Voted';
+                mainStatus.className = 'completed';
             } else {
                 mainStatus.textContent = 'Not Voted';
                 mainStatus.className = 'pending';
+            }
+            
+            if (Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) {
+                dessertStatus.textContent = '✓ Voted';
+                dessertStatus.className = 'completed';
+            } else {
                 dessertStatus.textContent = 'Not Voted';
                 dessertStatus.className = 'pending';
             }
+            
+            if (Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0) {
+                sweaterStatus.textContent = '✓ Voted';
+                sweaterStatus.className = 'completed';
+            } else {
+                sweaterStatus.textContent = 'Not Voted';
+                sweaterStatus.className = 'pending';
+            }
+        } else {
+            mainStatus.textContent = 'Not Voted';
+            mainStatus.className = 'pending';
+            dessertStatus.textContent = 'Not Voted';
+            dessertStatus.className = 'pending';
+            sweaterStatus.textContent = 'Not Voted';
+            sweaterStatus.className = 'pending';
+        }
+    }
+    
+    async function selectCategory(category) {
+        currentCategory = category;
+        currentVotes = [];
+        
+        // Check if user has already voted in this category
+        try {
+            const data = await fetchGist();
+            allVotesData = data;
+            
+            if (data.votes[currentUser.id]) {
+                const userVotes = data.votes[currentUser.id];
+                if (category === 'main' && Array.isArray(userVotes.main) && userVotes.main.length > 0) {
+                    alert('You have already voted for Main Dishes! You can only vote once per category.');
+                    return;
+                }
+                if (category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) {
+                    alert('You have already voted for Desserts! You can only vote once per category.');
+                    return;
+                }
+                if (category === 'sweater' && Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0) {
+                    alert('You have already voted for Ugly Sweaters! You can only vote once per category.');
+                    return;
+                }
+            }
+        } catch (err) {
+            console.error('Error loading votes:', err);
         }
         
-        async function selectCategory(category) {
-            currentCategory = category;
-            currentVotes = [];
-            
-            // Check if user has already voted in this category
-            try {
-                const data = await fetchGist();
-                allVotesData = data;
-                
-                if (data.votes[currentUser.id]) {
-                    const userVotes = data.votes[currentUser.id];
-                    if (category === 'main' && Array.isArray(userVotes.main) && userVotes.main.length > 0) {
-                        alert('You have already voted for Main Dishes! You can only vote once per category.');
-                        return;
-                    }
-                    if (category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) {
-                        alert('You have already voted for Desserts! You can only vote once per category.');
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.error('Error loading votes:', err);
-            }
-            
-            document.getElementById('votingUserName').textContent = currentUser.name;
-            document.getElementById('categoryTitle').textContent =category === 'main' ? 'Main Dishes' : 'Desserts';
-            showSection('votingSection');
+        document.getElementById('votingUserName').textContent = currentUser.name;
+        let categoryTitle = '';
+        if (category === 'main') categoryTitle = 'Main Dishes';
+        else if (category === 'dessert') categoryTitle = 'Desserts';
+        else if (category === 'sweater') categoryTitle = 'Ugly Christmas Sweaters';
+        document.getElementById('categoryTitle').textContent = categoryTitle;
+        
+        showSection('votingSection');
         await renderDishes();
     }
     
@@ -898,7 +1013,7 @@
             const filteredDishes = dishes.filter(d => d.category === currentCategory);
             
             if (filteredDishes.length === 0) {
-                dishList.innerHTML = '<p style="text-align: center; color: #666;">No dishes available in this category yet.</p>';
+                dishList.innerHTML = '<p style="text-align: center; color: #666;">No items available in this category yet.</p>';
                 return;
             }
             
@@ -918,7 +1033,7 @@
             
             updateVotesRemaining();
         } catch (err) {
-            loading.textContent = 'Error loading dishes. Please refresh.';
+            loading.textContent = 'Error loading items. Please refresh.';
             console.error(err);
         }
     }
@@ -935,7 +1050,7 @@
         card.innerHTML = `
             ${imageHtml}
             <div class="dish-name">${dish.name}</div>
-            <div class="dish-contributor">Brought by ${dish.contributor}</div>
+            <div class="dish-contributor">By ${dish.contributor}</div>
             <div class="stars">
                 <input type="checkbox" 
                        id="vote-${dish.id}" 
@@ -1002,29 +1117,43 @@
             if (!data.votes[currentUser.id]) {
                 data.votes[currentUser.id] = {
                     main: [],
-                    dessert: []
+                    dessert: [],
+                    sweater: []
                 };
             }
             
             // Update votes for current category
             if (currentCategory === 'main') {
                 data.votes[currentUser.id].main = currentVotes;
-            } else {
+            } else if (currentCategory === 'dessert') {
                 data.votes[currentUser.id].dessert = currentVotes;
+            } else if (currentCategory === 'sweater') {
+                data.votes[currentUser.id].sweater = currentVotes;
             }
             
             // Save back to gist
             await updateGist(data);
             
-            alert(`Thank you for voting! You selected ${currentVotes.length} ${currentCategory === 'main' ? 'main dish' : 'dessert'}${currentVotes.length !== 1 ? 'es' : ''}.`);
+            allVotesData = data;
+            
+            let categoryName = '';
+            if (currentCategory === 'main') categoryName = 'main dish';
+            else if (currentCategory === 'dessert') categoryName = 'dessert';
+            else if (currentCategory === 'sweater') categoryName = 'ugly sweater';
+            
+            alert(`Thank you for voting! You selected ${currentVotes.length} ${categoryName}${currentVotes.length !== 1 ? (currentCategory === 'sweater' ? 's' : 'es') : ''}.`);
             
             currentVotes = [];
             currentCategory = null;
             
-            // Reload data and go back to category selection
-            allVotesData = data;
-            updateVotingStatus();
-            showSection('categorySelection');
+            // Check if user has completed all voting
+            if (hasCompletedAllVoting()) {
+                showSection('thankyouSection');
+            } else {
+                // Go back to category selection
+                updateVotingStatus();
+                showSection('categorySelection');
+            }
         } catch (err) {
             alert('Error submitting votes. Please try again.');
             console.error(err);
@@ -1043,10 +1172,12 @@
         const loading = document.getElementById('loadingResults');
         const mainResultsList = document.getElementById('mainResultsList');
         const dessertResultsList = document.getElementById('dessertResultsList');
+        const sweaterResultsList = document.getElementById('sweaterResultsList');
         
         loading.style.display = 'block';
         mainResultsList.innerHTML = '';
         dessertResultsList.innerHTML = '';
+        sweaterResultsList.innerHTML = '';
         
         try {
             const data = await fetchGist();
@@ -1055,6 +1186,7 @@
             
             const mainResults = [];
             const dessertResults = [];
+            const sweaterResults = [];
             
             currentDishes.forEach(dish => {
                 let voteCount = 0;
@@ -1064,6 +1196,8 @@
                     if (dish.category === 'main' && Array.isArray(userVotes.main) && userVotes.main.includes(dish.id)) {
                         voteCount++;
                     } else if (dish.category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'sweater' && Array.isArray(userVotes.sweater) && userVotes.sweater.includes(dish.id)) {
                         voteCount++;
                     }
                 });
@@ -1076,14 +1210,17 @@
                 
                 if (dish.category === 'main') {
                     mainResults.push(result);
-                } else {
+                } else if (dish.category === 'dessert') {
                     dessertResults.push(result);
+                } else if (dish.category === 'sweater') {
+                    sweaterResults.push(result);
                 }
             });
             
-            // Sort both arrays by vote count
+            // Sort all arrays by vote count
             mainResults.sort((a, b) => b.voteCount - a.voteCount);
             dessertResults.sort((a, b) => b.voteCount - a.voteCount);
+            sweaterResults.sort((a, b) => b.voteCount - a.voteCount);
             
             loading.style.display = 'none';
             
@@ -1117,12 +1254,29 @@
                 dessertResultsList.appendChild(item);
             });
             
+            // Display sweater results
+            sweaterResults.forEach((result, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="result-name">${medal} ${index + 1}. ${result.name}</div>
+                        <div style="color: #666; font-size: 0.9em;">by ${result.contributor}</div>
+                    </div>
+                    <div class="result-rating">${result.voteCount} vote${result.voteCount !== 1 ? 's' : ''}</div>
+                `;
+                sweaterResultsList.appendChild(item);
+            });
+            
             // Count voters by category
             let mainVoters = 0;
             let dessertVoters = 0;
+            let sweaterVoters = 0;
             Object.values(allVotes).forEach(userVotes => {
                 if (Array.isArray(userVotes.main) && userVotes.main.length > 0) mainVoters++;
                 if (Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) dessertVoters++;
+                if (Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0) sweaterVoters++;
             });
             
             // Show total voters
@@ -1132,8 +1286,9 @@
             voterInfo.innerHTML = `
                 <div>Main Dishes: ${mainVoters} / ${registeredVoters} voters (${Math.round((mainVoters / registeredVoters) * 100)}%)</div>
                 <div style="margin-top: 10px;">Desserts: ${dessertVoters} / ${registeredVoters} voters (${Math.round((dessertVoters / registeredVoters) * 100)}%)</div>
+                <div style="margin-top: 10px;">Ugly Sweaters: ${sweaterVoters} / ${registeredVoters} voters (${Math.round((sweaterVoters / registeredVoters) * 100)}%)</div>
             `;
-            dessertResultsList.appendChild(voterInfo);
+            sweaterResultsList.appendChild(voterInfo);
         } catch (err) {
             loading.textContent = 'Error loading results. Please refresh.';
             console.error(err);
@@ -1156,6 +1311,7 @@
             
             const mainResults = [];
             const dessertResults = [];
+            const sweaterResults = [];
             
             currentDishes.forEach(dish => {
                 let voteCount = 0;
@@ -1165,6 +1321,8 @@
                         voteCount++;
                     } else if (dish.category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.includes(dish.id)) {
                         voteCount++;
+                    } else if (dish.category === 'sweater' && Array.isArray(userVotes.sweater) && userVotes.sweater.includes(dish.id)) {
+                        voteCount++;
                     }
                 });
                 
@@ -1172,18 +1330,21 @@
                     Dish: dish.name,
                     Contributor: dish.contributor,
                     Votes: voteCount,
-                    Category: dish.category === 'main' ? 'Main Dish' : 'Dessert'
+                    Category: dish.category === 'main' ? 'Main Dish' : dish.category === 'dessert' ? 'Dessert' : 'Ugly Sweater'
                 };
                 
                 if (dish.category === 'main') {
                     mainResults.push(result);
-                } else {
+                } else if (dish.category === 'dessert') {
                     dessertResults.push(result);
+                } else if (dish.category === 'sweater') {
+                    sweaterResults.push(result);
                 }
             });
             
             mainResults.sort((a, b) => b.Votes - a.Votes);
             dessertResults.sort((a, b) => b.Votes - a.Votes);
+            sweaterResults.sort((a, b) => b.Votes - a.Votes);
             
             // Create CSV
             const csv = [
@@ -1193,7 +1354,11 @@
                 [],
                 ['DESSERTS'],
                 ['Rank', 'Dish', 'Contributor', 'Total Votes'],
-                ...dessertResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes])
+                ...dessertResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes]),
+                [],
+                ['UGLY CHRISTMAS SWEATERS'],
+                ['Rank', 'Sweater', 'Owner', 'Total Votes'],
+                ...sweaterResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes])
             ].map(row => row.join(',')).join('\n');
             
             // Download
@@ -1216,7 +1381,7 @@
         const category = document.getElementById('newDishCategory').value;
         
         if (!name || !contributor) {
-            alert('Please enter both dish name and contributor');
+            alert('Please enter both item name and person name');
             return;
         }
         
@@ -1232,10 +1397,10 @@
             document.getElementById('newDishImage').value = '';
             document.getElementById('newDishCategory').value = 'main';
             
-            alert('Dish added successfully!');
+            alert('Item added successfully!');
             await calculateAndDisplayResults();
         } catch (err) {
-            alert('Error adding dish');
+            alert('Error adding item');
             console.error(err);
         }
     }
