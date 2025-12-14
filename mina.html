@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Potluck Voting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 50%, #c41e3a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "🥏";
+            position: fixed;
+            font-size: 60px;
+            opacity: 0.1;
+            animation: float 20s infinite;
+            top: 10%;
+            left: 10%;
+        }
+        
+        body::after {
+            content: "🎄";
+            position: fixed;
+            font-size: 60px;
+            opacity: 0.1;
+            animation: float 25s infinite reverse;
+            bottom: 10%;
+            right: 10%;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid #FFD700;
+            position: relative;
+        }
+        
+        .container::before {
+            content: "🥏 🎅 🥏 ⛄ 🥏 🎄 🥏 🎁 🥏";
+            display: block;
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            letter-spacing: 10px;
+        }
+        
+        h1 {
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 50%, #c41e3a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #165B33;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .login-section, .category-selection, .voting-section, .results-section, .setup-section, .thankyou-section {
+            display: none;
+        }
+        
+        .login-section.active, .category-selection.active, .voting-section.active, .results-section.active, .setup-section.active, .thankyou-section.active {
+            display: block;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input[type="text"], input[type="password"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+            outline: none;
+            border-color: #c41e3a;
+            box-shadow: 0 0 10px rgba(196, 30, 58, 0.2);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.5);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+        
+        .category-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f8f0 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 3px solid #FFD700;
+            transition: border-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .category-card:hover {
+            border-color: #c41e3a;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(196, 30, 58, 0.3);
+        }
+        
+        .category-card h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .category-card.main-dish h2 {
+            color: #c41e3a;
+        }
+        
+        .category-card.dessert h2 {
+            color: #165B33;
+        }
+        
+        .category-card.sweater h2 {
+            color: #FF6B6B;
+        }
+        
+        .category-card p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+.dish-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8f0 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #FFD700;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Image container INSIDE the card */
+.dish-card .image-wrapper {
+    height: 200px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.6); /* blends with gradient */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+/* Image itself */
+.dish-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+        
+        .dish-card:hover {
+            border-color: #c41e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.2);
+        }
+        
+        .dish-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .dish-name {
+            font-size: 1.3em;
+            color: #165B33;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .dish-contributor {
+            color: #c41e3a;
+            margin-bottom: 15px;
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .stars {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .vote-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #c41e3a;
+        }
+        
+        .vote-label {
+            font-weight: 600;
+            color: #165B33;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .selected-badge {
+            background: linear-gradient(135deg, #c41e3a 0%, #165B33 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .user-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff5f5 0%, #f0f8f0 100%);
+            border-radius: 8px;
+            border: 2px solid #FFD700;
+        }
+        
+        .voting-status {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .status-item {
+            text-align: center;
+        }
+        
+        .status-icon {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .status-text {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .completed {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .pending {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .results-list {
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-name {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .result-rating {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .admin-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .add-dish-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #165B33;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        
+        .thankyou-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .thankyou-content h2 {
+            color: #c41e3a;
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+        
+        .thankyou-content p {
+            font-size: 1.3em;
+            color: #165B33;
+            margin-bottom: 30px;
+        }
+        
+        .thankyou-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-left: 0 !important;
+                margin-bottom: 10px;
+            }
+            
+            .voting-status {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🥏 Frisbee Christmas Potluck 🎄</h1>
+        <p class="subtitle">Vote for your favorites!</p>
+        
+        <!-- Setup Section (First Time Only) -->
+        <div class="setup-section" id="setupSection">
+            <div class="alert alert-info">
+                <strong>First Time Setup:</strong> To enable voting across all devices, we need to configure GitHub Gist storage.
+            </div>
+            
+            <h3>Step 1: Create a GitHub Personal Access Token</h3>
+            <ol style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank">GitHub Token Settings</a></li>
+                <li>Name: "Potluck Voting"</li>
+                <li>Expiration: 7 days (or custom)</li>
+                <li>Check only: <strong>gist</strong> permission</li>
+                <li>Click "Generate token" and copy it</li>
+            </ol>
+            
+            <div class="input-group">
+                <label for="githubToken">GitHub Token</label>
+                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx">
+            </div>
+            
+            <h3 style="margin-top: 25px;">Step 2: Create a Gist ID</h3>
+            <ol style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                <li>Go to <a href="https://gist.github.com/" target="_blank">gist.github.com</a></li>
+                <li>Create a new gist with filename: <strong>potluck-votes.json</strong></li>
+                <li>Content: <code>{}</code></li>
+                <li>Create as <strong>Secret gist</strong></li>
+                <li>Copy the Gist ID from URL (e.g., gist.github.com/username/<strong>abc123...</strong>)</li>
+            </ol>
+            
+            <div class="input-group">
+                <label for="gistId">Gist ID</label>
+                <input type="text" id="gistId" placeholder="abc123def456...">
+            </div>
+            
+            <div class="input-group">
+                <label for="adminPassword">Set Admin Password</label>
+                <input type="password" id="adminPassword" placeholder="Choose a password">
+            </div>
+            
+            <div class="button-group">
+                <button class="btn" onclick="saveConfig()">Save Configuration</button>
+            </div>
+            
+            <div class="alert alert-warning" style="margin-top: 20px;">
+                <strong>Note:</strong> Store these credentials safely! You'll need the admin password to access results.
+            </div>
+        </div>
+        
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <div class="input-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" placeholder="Enter your first name">
+            </div>
+            <div class="input-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" placeholder="Enter your last name">
+            </div>
+            <div class="button-group">
+                <button class="btn" onclick="login()">Start Voting</button>
+            </div>
+        </div>
+        
+        <!-- Category Selection Section -->
+        <div class="category-selection" id="categorySelection">
+            <div class="user-info">
+                <p>Welcome, <strong id="userName"></strong>!</p>
+                <p style="margin-top: 10px; color: #666;">Choose a category to vote for:</p>
+                
+                <div class="voting-status">
+                    <div class="status-item">
+                        <div class="status-icon">🍖</div>
+                        <div class="status-text">Main Dishes</div>
+                        <div id="mainStatus" class="pending">Not Voted</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon">🍰</div>
+                        <div class="status-text">Desserts</div>
+                        <div id="dessertStatus" class="pending">Not Voted</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon">🎅</div>
+                        <div class="status-text">Ugly Sweaters</div>
+                        <div id="sweaterStatus" class="pending">Not Voted</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category-card main-dish" onclick="selectCategory('main')">
+                <h2>🍖 Vote for Main Dishes</h2>
+                <p>Choose your top 3 favorite main dishes</p>
+            </div>
+            
+            <div class="category-card dessert" onclick="selectCategory('dessert')">
+                <h2>🍰 Vote for Desserts</h2>
+                <p>Choose your top 3 favorite desserts</p>
+            </div>
+            
+            <div class="category-card sweater" onclick="selectCategory('sweater')">
+                <h2>🎅 Vote for Ugly Christmas Sweaters</h2>
+                <p>Choose the top 3 ugliest (best!) sweaters</p>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Voting Section -->
+        <div class="voting-section" id="votingSection">
+            <div class="user-info">
+                <p>Welcome, <strong id="votingUserName"></strong>!</p>
+                <p style="margin-top: 10px; color: #c41e3a; font-weight: 600;">
+                    <span id="categoryTitle"></span>: <span id="votesRemaining">3</span> votes remaining
+                </p>
+            </div>
+            
+            <div id="loadingDishes" class="loading">Loading items...</div>
+            <div id="dishList"></div>
+            
+            <div class="button-group">
+                <button class="btn" onclick="submitVotes()" id="submitBtn">Submit Votes</button>
+                <button class="btn btn-secondary" onclick="backToCategories()">Back</button>
+            </div>
+        </div>
+        
+        <!-- Thank You Section -->
+        <div class="thankyou-section" id="thankyouSection">
+            <div class="thankyou-content">
+                <h2>🎉 Thank You for Voting! 🎉</h2>
+                <p>Your votes have been recorded. Have a Merry Christmas!</p>
+                <img src="https://raw.githubusercontent.com/monmon-2007/frisbee/refs/heads/main/christmas_thanks_animation.gif" alt="Funny Christmas" class="thankyou-image">
+                <p style="font-size: 1em; margin-top: 20px; color: #666;">Santa approves! 🎅</p>
+                <div class="button-group" style="margin-top: 30px;">
+                    <button class="btn" onclick="logout()">Done</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section (Admin Only) -->
+        <div class="results-section" id="resultsSection">
+            <div class="user-info">
+                <p>Admin View - Voting Results</p>
+            </div>
+            <div id="loadingResults" class="loading">Loading results...</div>
+            
+            <h2 style="color: #c41e3a; margin-bottom: 15px;">🍖 Main Dishes Rankings</h2>
+            <div id="mainResultsList" class="results-list"></div>
+            
+            <h2 style="color: #165B33; margin-top: 40px; margin-bottom: 15px;">🍰 Desserts Rankings</h2>
+            <div id="dessertResultsList" class="results-list"></div>
+            
+            <h2 style="color: #FF6B6B; margin-top: 40px; margin-bottom: 15px;">🎅 Ugly Christmas Sweaters Rankings</h2>
+            <div id="sweaterResultsList" class="results-list"></div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="backToVoting()">Back to Voting</button>
+                <button class="btn" onclick="exportResults()">Export Results</button>
+                <button class="btn" onclick="refreshResults()">Refresh Results</button>
+            </div>
+            
+            <!-- Admin Controls -->
+            <div class="admin-section">
+                <h2>Admin Controls</h2>
+                <div class="add-dish-form">
+                    <h3>Add New Item</h3>
+                    <div class="input-group">
+                        <label for="newDishCategory">Category</label>
+                        <select id="newDishCategory" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                            <option value="main">Main Dish</option>
+                            <option value="dessert">Dessert</option>
+                            <option value="sweater">Ugly Sweater</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="newDishName">Item Name</label>
+                        <input type="text" id="newDishName" placeholder="e.g., Apple Pie or John's Sweater">
+                    </div>
+                    <div class="input-group">
+                        <label for="newDishContributor">Person's Name</label>
+                        <input type="text" id="newDishContributor" placeholder="e.g., John Smith">
+                    </div>
+                    <div class="input-group">
+                        <label for="newDishImage">Image URL (optional)</label>
+                        <input type="text" id="newDishImage" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <button class="btn" onclick="addDish()">Add Item</button>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="clearAllVotes()" style="background: #dc3545;">Clear All Votes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration - EDIT THESE VALUES
+        let a ='gh'
+        let b ='p_'
+        let h = 'tT5FWcJl9H9PFgVbR5OH9akpePC0cO4Trbp9'
+        let CONFIG = {
+            githubToken: a+b+h,  // Replace with your GitHub token
+            gistId: '07f5b26d374e71816148a5d4e927f83a',            // Replace with your Gist ID
+            adminPassword: 'mina'     // Replace with your chosen admin password
+        };
+
+
+        
+        // Allowed voters - EDIT THIS LIST
+        // Add names in format: "FirstName LastName" (case-insensitive)
+        const ALLOWED_VOTERS = [
+            "Abanoub Boulis",
+            "Amanda Minias",
+            "Amany Basta",
+            "Amir Shenoda",
+            "Amira Geris",
+            "Andrew Beshai",
+            "Andrew Fahim",
+            "Andrew Gayed",
+            "Andrew Zackary",
+            "Angie Raghib",
+            "Ann Sourial",
+            "Ayten Sergios",
+            "Becca Mina",
+            "Beemen Meshriky",
+            "Bernadit Moussa",
+            "Beshoy Megalaa",
+            "Botamina Moussa",
+            "Carolin Megalaa",
+            "Cathrine Abdelmessih",
+            "Chris Ashamalla",
+            "Christina Nagib",
+            "Christine Gendy",
+            "Christopher Mina",
+            "Cyrine Batshon",
+            "David Arida",
+            "David Gerges",
+            "Engy Malik",
+            "Fady Hanna",
+            "George Ashem",
+            "Germeen Kilada",
+            "Jacky Abdelmalek",
+            "Jenn Makar",
+            "Jerry Sedra",
+            "Jess Shoukry",
+            "Jessica Azer",
+            "Jessica Mina",
+            "Jessica Sourial",
+            "Joanna Sadek",
+            "John Ayoub",
+            "John Ghebrial",
+            "John saleeb",
+            "John Shenouda",
+            "Kamal Youssef",
+            "Karim Nashed",
+            "Kero Nashed",
+            "Kerolos Danyal",
+            "Kiroles Hanna",
+            "Lisa Iscandar",
+            "Magy Aziz",
+            "Magy Naguib",
+            "Marco Demian",
+            "Marez Megalla",
+            "Maria Nawar",
+            "Mariam Matta",
+            "Mariham Wassef",
+            "Marina Armanious",
+            "Marina Aziz",
+            "Marina Guirguis",
+            "Marina Mikhael",
+            "Marina Mounir",
+            "Marina Nagib",
+            "Marina Nasr",
+            "Marina Nassif",
+            "Mark Awad",
+            "Mark Azer",
+            "Mark gobrial",
+            "Mark Halaka",
+            "Mark Iscandar",
+            "Mark Malek",
+            "Mary Mena",
+            "Mary Nashed",
+            "Mary Salib",
+            "Matt Atewan",
+            "Maureen Samy",
+            "Mena Basta",
+            "Mena Hanna",
+            "Mena Shokralla",
+            "Michael Bestawrous",
+            "Michael Fakhry",
+            "Michael Gadallah",
+            "Micheal Mossad",
+            "Mike Lawendy",
+            "Mina Aziz",
+            "Mina Barsoum",
+            "Mina botros",
+            "Mina Gadallah",
+            "Mina Hanna",
+            "Mina Riad",
+            "Mina Youssef",
+            "Mira Mikhael",
+            "Mira Mina",
+            "Mirna Hanna",
+            "Mona Abdel-Malek",
+            "Moner Demian",
+            "Monica Naoum",
+            "Monica Shenoda",
+            "Nardeen Soliman",
+            "Narden Armanious",
+            "Nermine Hakim",
+            "Neven abdo",
+            "Nicole girgis",
+            "Olivia Boutros",
+            "Parthenia Bogdady",
+            "Peter Abdelshahid",
+            "Peter Wahba",
+            "Rafael Girgis",
+            "Ramez Ashem",
+            "Richard saweers",
+            "Rogina Nagib",
+            "Sameh Abdelmalak",
+            "Sandi Grace",
+            "Sandy Azer",
+            "Sara Youssef",
+            "Sarah Helmy",
+            "Sarah Nashed",
+            "Sherry Sourial",
+            "Silvana Victor",
+            "Stephanie Nashed",
+            "Thomas Bastawrous",
+            "Tony Andrews",
+            "Yostina Hakim",
+            "Youssef Wassef"
+        ];
+
+        
+        // Sample dishes with images
+        let dishes = [
+            { 
+                id: 1, 
+                name: "Honey Glazed Ham", 
+                contributor: "Sarah Johnson",
+                image: "https://images.unsplash.com/photo-1545251223-0f73eb45bdfd?w=400",
+                category: "main"
+            },
+            { 
+                id: 2, 
+                name: "Mac and Cheese", 
+                contributor: "Mike Chen",
+                image: "https://images.unsplash.com/photo-1543339494-b4cd4f7ba686?w=400",
+                category: "main"
+            },
+            { 
+                id: 3, 
+                name: "Caesar Salad", 
+                contributor: "Emily Davis",
+                image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400",
+                category: "main"
+            },
+            { 
+                id: 4, 
+                name: "Chocolate Cake", 
+                contributor: "Tom Wilson",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400",
+                category: "dessert"
+            },
+            { 
+                id: 5, 
+                name: "Apple Pie", 
+                contributor: "Lisa Brown",
+                image: "https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=400",
+                category: "dessert"
+            },
+            { 
+                id: 6, 
+                name: "Tiramisu", 
+                contributor: "Maria Garcia",
+                image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400",
+                category: "dessert"
+            },
+            { 
+                id: 7, 
+                name: "Reindeer Monstrosity", 
+                contributor: "John Smith",
+                image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400",
+                category: "sweater"
+            },
+            { 
+                id: 8, 
+                name: "Light-Up Special", 
+                contributor: "Jane Doe",
+                image: "https://images.unsplash.com/photo-1574958269340-fa927503f3dd?w=400",
+                category: "sweater"
+            }
+        ];
+        
+        let currentUser = null;
+        let currentCategory = null;  // 'main', 'dessert', or 'sweater'
+        let currentVotes = [];  // Votes for current category
+        let allVotesData = { votes: {}, dishes: [] };
+        const MAX_VOTES = 3;
+        
+        // Initialize
+        function init() {
+            // Check if config is set
+            if (CONFIG.githubToken === 'YOUR_GITHUB_TOKEN_HERE' || 
+                CONFIG.gistId === 'YOUR_GIST_ID_HERE') {
+                showSection('setupSection');
+            } else {
+                showSection('loginSection');
+                loadDishesFromGist();
+            }
+        }
+        
+        function loadConfig() {
+            // Config is now hardcoded, no need to load from localStorage
+        }
+        
+        function saveConfig() {
+            alert('Please edit the CONFIG values directly in the code at the top of the script section.');
+        }
+        
+        async function initializeGist() {
+            const data = {
+                votes: {},
+                dishes: dishes
+            };
+            
+            return await updateGist(data);
+        }
+        
+        async function loadDishesFromGist() {
+            try {
+                const data = await fetchGist();
+                if (data.dishes && data.dishes.length > 0) {
+                    dishes = data.dishes;
+                }
+                allVotesData = data;
+            } catch (err) {
+                console.error('Error loading dishes:', err);
+            }
+        }
+        
+  /*        async function fetchGist() {
+            const response = await fetch(`https://api.github.com/gists/${CONFIG.gistId}`, {
+                headers: {
+                    'Authorization': `token ${CONFIG.githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch gist');
+            }
+            
+            const gist = await response.json();
+            const content = gist.files['potluck-votes.json'].content;
+            return JSON.parse(content);
+        }
+
+        
+        
+      async function updateGist(data) {
+            const response = await fetch(`https://api.github.com/gists/${CONFIG.gistId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${CONFIG.githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    files: {
+                        'potluck-votes.json': {
+                            content: JSON.stringify(data, null, 2)
+                        }
+                    }
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to update gist');
+            }
+            
+            return await response.json();
+        }*/
+        
+        async function fetchGist() {
+  const response = await fetch("http://localhost:8080/api/readP");
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch JSON");
+  }
+
+  return await response.json();
+}
+
+async function updateGist(data) {
+  const response = await fetch("/api/createP", {
+    method: "post", // POST replaces the entire JSON blob
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data, null, 2)
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update JSON");
+  }
+
+  return await response.json();
+}
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.login-section, .category-selection, .voting-section, .results-section, .setup-section, .thankyou-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        async function login() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            
+            if (!firstName || !lastName) {
+                alert('Please enter both first and last name');
+                return;
+            }
+            const fullName = firstName + ' ' + lastName;
+        
+        // Check for admin login
+        if (firstName.toLowerCase() === 'admin' && lastName === CONFIG.adminPassword) {
+            await showResults();
+            return;
+        }
+        
+        // Check if name is in allowed list (case-insensitive)
+        const isAllowed = ALLOWED_VOTERS.some(name => 
+            name.toLowerCase() === fullName.toLowerCase()
+        );
+        
+        if (!isAllowed) {
+            alert('Sorry, your name is not on the registered voter list. Please check your spelling or contact the organizer.');
+            return;
+        }
+        
+        currentUser = {
+            id: firstName.toLowerCase() + '_' + lastName.toLowerCase(),
+            name: fullName
+        };
+        
+        // Load voting status
+        try {
+            const data = await fetchGist();
+            allVotesData = data;
+            
+            // Check if user has completed all voting
+            if (hasCompletedAllVoting()) {
+                showSection('thankyouSection');
+                return;
+            }
+            
+            // Update status display
+            updateVotingStatus();
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            showSection('categorySelection');
+        } catch (err) {
+            console.error('Error loading votes:', err);
+            document.getElementById('userName').textContent = currentUser.name;
+            showSection('categorySelection');
+        }
+    }
+    
+    function hasCompletedAllVoting() {
+        if (!allVotesData.votes[currentUser.id]) return false;
+        
+        const userVotes = allVotesData.votes[currentUser.id];
+        const hasMain = Array.isArray(userVotes.main) && userVotes.main.length > 0;
+        const hasDessert = Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0;
+        const hasSweater = Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0;
+        
+        return hasMain && hasDessert && hasSweater;
+    }
+    
+    function updateVotingStatus() {
+        const mainStatus = document.getElementById('mainStatus');
+        const dessertStatus = document.getElementById('dessertStatus');
+        const sweaterStatus = document.getElementById('sweaterStatus');
+        
+        if (allVotesData.votes[currentUser.id]) {
+            const userVotes = allVotesData.votes[currentUser.id];
+            
+            if (Array.isArray(userVotes.main) && userVotes.main.length > 0) {
+                mainStatus.textContent = '✓ Voted';
+                mainStatus.className = 'completed';
+            } else {
+                mainStatus.textContent = 'Not Voted';
+                mainStatus.className = 'pending';
+            }
+            
+            if (Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) {
+                dessertStatus.textContent = '✓ Voted';
+                dessertStatus.className = 'completed';
+            } else {
+                dessertStatus.textContent = 'Not Voted';
+                dessertStatus.className = 'pending';
+            }
+            
+            if (Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0) {
+                sweaterStatus.textContent = '✓ Voted';
+                sweaterStatus.className = 'completed';
+            } else {
+                sweaterStatus.textContent = 'Not Voted';
+                sweaterStatus.className = 'pending';
+            }
+        } else {
+            mainStatus.textContent = 'Not Voted';
+            mainStatus.className = 'pending';
+            dessertStatus.textContent = 'Not Voted';
+            dessertStatus.className = 'pending';
+            sweaterStatus.textContent = 'Not Voted';
+            sweaterStatus.className = 'pending';
+        }
+    }
+    
+    async function selectCategory(category) {
+        currentCategory = category;
+        currentVotes = [];
+        
+        // Check if user has already voted in this category
+        try {
+            const data = await fetchGist();
+            allVotesData = data;
+            
+            if (data.votes[currentUser.id]) {
+                const userVotes = data.votes[currentUser.id];
+                if (category === 'main' && Array.isArray(userVotes.main) && userVotes.main.length > 0) {
+                    alert('You have already voted for Main Dishes! You can only vote once per category.');
+                    return;
+                }
+                if (category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) {
+                    alert('You have already voted for Desserts! You can only vote once per category.');
+                    return;
+                }
+                if (category === 'sweater' && Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0) {
+                    alert('You have already voted for Ugly Sweaters! You can only vote once per category.');
+                    return;
+                }
+            }
+        } catch (err) {
+            console.error('Error loading votes:', err);
+        }
+        
+        document.getElementById('votingUserName').textContent = currentUser.name;
+        let categoryTitle = '';
+        if (category === 'main') categoryTitle = 'Main Dishes';
+        else if (category === 'dessert') categoryTitle = 'Desserts';
+        else if (category === 'sweater') categoryTitle = 'Ugly Christmas Sweaters';
+        document.getElementById('categoryTitle').textContent = categoryTitle;
+        
+        showSection('votingSection');
+        await renderDishes();
+    }
+    
+    function backToCategories() {
+        currentVotes = [];
+        currentCategory = null;
+        updateVotingStatus();
+        showSection('categorySelection');
+    }
+    
+    function logout() {
+        currentUser = null;
+        currentCategory = null;
+        currentVotes = [];
+        document.getElementById('firstName').value = '';
+        document.getElementById('lastName').value = '';
+        showSection('loginSection');
+    }
+    
+    function updateVotesRemaining() {
+        const remaining = MAX_VOTES - currentVotes.length;
+        document.getElementById('votesRemaining').textContent = remaining;
+    }
+    
+    async function renderDishes() {
+        const dishList = document.getElementById('dishList');
+        const loading = document.getElementById('loadingDishes');
+        
+        try {
+            const data = await fetchGist();
+            dishes = data.dishes || dishes;
+            
+            loading.style.display = 'none';
+            dishList.innerHTML = '';
+            
+            // Filter dishes by current category
+            const filteredDishes = dishes.filter(d => d.category === currentCategory);
+            
+            if (filteredDishes.length === 0) {
+                dishList.innerHTML = '<p style="text-align: center; color: #666;">No items available in this category yet.</p>';
+                return;
+            }
+            
+            // Render dishes
+            filteredDishes.forEach(dish => {
+                const card = createDishCard(dish, currentVotes);
+                dishList.appendChild(card);
+            });
+            
+            // Add change handlers to checkboxes
+            document.querySelectorAll('.vote-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function(e) {
+                    const dishId = parseInt(this.dataset.dishId);
+                    toggleVote(dishId, this);
+                });
+            });
+            
+            updateVotesRemaining();
+        } catch (err) {
+            loading.textContent = 'Error loading items. Please refresh.';
+            console.error(err);
+        }
+    }
+    
+    function createDishCard(dish, voteArray) {
+        const card = document.createElement('div');
+        card.className = 'dish-card';
+        
+        const isSelected = voteArray.includes(dish.id);
+        
+        const imageHtml = dish.image ? 
+            `<img src="${dish.image}" alt="${dish.name}" class="dish-image" onerror="this.style.display='none'">` : '';
+        
+        card.innerHTML = `
+            ${imageHtml}
+            <div class="dish-name">${dish.name}</div>
+            <div class="dish-contributor">By ${dish.contributor}</div>
+            <div class="stars">
+                <input type="checkbox" 
+                       id="vote-${dish.id}" 
+                       class="vote-checkbox" 
+                       data-dish-id="${dish.id}"
+                       ${isSelected ? 'checked' : ''}>
+                <label for="vote-${dish.id}" class="vote-label">
+                    ${isSelected ? '<span class="selected-badge">✓ Selected</span>' : 'Select as Top 3'}
+                </label>
+            </div>
+        `;
+        
+        return card;
+    }
+    
+    function toggleVote(dishId, checkbox) {
+        if (checkbox.checked) {
+            // Trying to add a vote
+            if (currentVotes.length >= MAX_VOTES) {
+                checkbox.checked = false;
+                alert(`You can only select ${MAX_VOTES} items!`);
+                return;
+            }
+            currentVotes.push(dishId);
+        } else {
+            // Removing a vote
+            const index = currentVotes.indexOf(dishId);
+            if (index > -1) {
+                currentVotes.splice(index, 1);
+            }
+        }
+        
+        // Update the label
+        const label = checkbox.nextElementSibling;
+        if (checkbox.checked) {
+            label.innerHTML = '<span class="selected-badge">✓ Selected</span>';
+        } else {
+            label.innerHTML = 'Select as Top 3';
+        }
+        
+        updateVotesRemaining();
+    }
+    
+    async function submitVotes() {
+        if (currentVotes.length === 0) {
+            alert('Please select at least one item before submitting!');
+            return;
+        }
+        
+        if (currentVotes.length > MAX_VOTES) {
+            alert(`Please select only ${MAX_VOTES} items!`);
+            return;
+        }
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        try {
+            // Fetch current data
+            const data = await fetchGist();
+            
+            // Initialize user votes if not exist
+            if (!data.votes[currentUser.id]) {
+                data.votes[currentUser.id] = {
+                    main: [],
+                    dessert: [],
+                    sweater: []
+                };
+            }
+            
+            // Update votes for current category
+            if (currentCategory === 'main') {
+                data.votes[currentUser.id].main = currentVotes;
+            } else if (currentCategory === 'dessert') {
+                data.votes[currentUser.id].dessert = currentVotes;
+            } else if (currentCategory === 'sweater') {
+                data.votes[currentUser.id].sweater = currentVotes;
+            }
+            
+            // Save back to gist
+            await updateGist(data);
+            
+            allVotesData = data;
+            
+            let categoryName = '';
+            if (currentCategory === 'main') categoryName = 'main dish';
+            else if (currentCategory === 'dessert') categoryName = 'dessert';
+            else if (currentCategory === 'sweater') categoryName = 'ugly sweater';
+            
+            alert(`Thank you for voting! You selected ${currentVotes.length} ${categoryName}${currentVotes.length !== 1 ? (currentCategory === 'sweater' ? 's' : 'es') : ''}.`);
+            
+            currentVotes = [];
+            currentCategory = null;
+            
+            // Check if user has completed all voting
+            if (hasCompletedAllVoting()) {
+                showSection('thankyouSection');
+            } else {
+                // Go back to category selection
+                updateVotingStatus();
+                showSection('categorySelection');
+            }
+        } catch (err) {
+            alert('Error submitting votes. Please try again.');
+            console.error(err);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Votes';
+        }
+    }
+    
+    async function showResults() {
+        showSection('resultsSection');
+        await calculateAndDisplayResults();
+    }
+    
+    async function calculateAndDisplayResults() {
+        const loading = document.getElementById('loadingResults');
+        const mainResultsList = document.getElementById('mainResultsList');
+        const dessertResultsList = document.getElementById('dessertResultsList');
+        const sweaterResultsList = document.getElementById('sweaterResultsList');
+        
+        loading.style.display = 'block';
+        mainResultsList.innerHTML = '';
+        dessertResultsList.innerHTML = '';
+        sweaterResultsList.innerHTML = '';
+        
+        try {
+            const data = await fetchGist();
+            const allVotes = data.votes || {};
+            const currentDishes = data.dishes || dishes;
+            
+            const mainResults = [];
+            const dessertResults = [];
+            const sweaterResults = [];
+            
+            currentDishes.forEach(dish => {
+                let voteCount = 0;
+                
+                // Count votes for this dish
+                Object.values(allVotes).forEach(userVotes => {
+                    if (dish.category === 'main' && Array.isArray(userVotes.main) && userVotes.main.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'sweater' && Array.isArray(userVotes.sweater) && userVotes.sweater.includes(dish.id)) {
+                        voteCount++;
+                    }
+                });
+                
+                const result = {
+                    name: dish.name,
+                    contributor: dish.contributor,
+                    voteCount: voteCount
+                };
+                
+                if (dish.category === 'main') {
+                    mainResults.push(result);
+                } else if (dish.category === 'dessert') {
+                    dessertResults.push(result);
+                } else if (dish.category === 'sweater') {
+                    sweaterResults.push(result);
+                }
+            });
+            
+            // Sort all arrays by vote count
+            mainResults.sort((a, b) => b.voteCount - a.voteCount);
+            dessertResults.sort((a, b) => b.voteCount - a.voteCount);
+            sweaterResults.sort((a, b) => b.voteCount - a.voteCount);
+            
+            loading.style.display = 'none';
+            
+            // Display main dish results
+            mainResults.forEach((result, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="result-name">${medal} ${index + 1}. ${result.name}</div>
+                        <div style="color: #666; font-size: 0.9em;">by ${result.contributor}</div>
+                    </div>
+                    <div class="result-rating">${result.voteCount} vote${result.voteCount !== 1 ? 's' : ''}</div>
+                `;
+                mainResultsList.appendChild(item);
+            });
+            
+            // Display dessert results
+            dessertResults.forEach((result, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="result-name">${medal} ${index + 1}. ${result.name}</div>
+                        <div style="color: #666; font-size: 0.9em;">by ${result.contributor}</div>
+                    </div>
+                    <div class="result-rating">${result.voteCount} vote${result.voteCount !== 1 ? 's' : ''}</div>
+                `;
+                dessertResultsList.appendChild(item);
+            });
+            
+            // Display sweater results
+            sweaterResults.forEach((result, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="result-name">${medal} ${index + 1}. ${result.name}</div>
+                        <div style="color: #666; font-size: 0.9em;">by ${result.contributor}</div>
+                    </div>
+                    <div class="result-rating">${result.voteCount} vote${result.voteCount !== 1 ? 's' : ''}</div>
+                `;
+                sweaterResultsList.appendChild(item);
+            });
+            
+            // Count voters by category
+            let mainVoters = 0;
+            let dessertVoters = 0;
+            let sweaterVoters = 0;
+            Object.values(allVotes).forEach(userVotes => {
+                if (Array.isArray(userVotes.main) && userVotes.main.length > 0) mainVoters++;
+                if (Array.isArray(userVotes.dessert) && userVotes.dessert.length > 0) dessertVoters++;
+                if (Array.isArray(userVotes.sweater) && userVotes.sweater.length > 0) sweaterVoters++;
+            });
+            
+            // Show total voters
+            const registeredVoters = ALLOWED_VOTERS.length;
+            const voterInfo = document.createElement('div');
+            voterInfo.style.cssText = 'text-align: center; margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-weight: 600;';
+            voterInfo.innerHTML = `
+                <div>Main Dishes: ${mainVoters} / ${registeredVoters} voters (${Math.round((mainVoters / registeredVoters) * 100)}%)</div>
+                <div style="margin-top: 10px;">Desserts: ${dessertVoters} / ${registeredVoters} voters (${Math.round((dessertVoters / registeredVoters) * 100)}%)</div>
+                <div style="margin-top: 10px;">Ugly Sweaters: ${sweaterVoters} / ${registeredVoters} voters (${Math.round((sweaterVoters / registeredVoters) * 100)}%)</div>
+            `;
+            sweaterResultsList.appendChild(voterInfo);
+        } catch (err) {
+            loading.textContent = 'Error loading results. Please refresh.';
+            console.error(err);
+        }
+    }
+    
+    async function refreshResults() {
+        await calculateAndDisplayResults();
+    }
+    
+    function backToVoting() {
+        showSection('loginSection');
+    }
+    
+    async function exportResults() {
+        try {
+            const data = await fetchGist();
+            const allVotes = data.votes || {};
+            const currentDishes = data.dishes || dishes;
+            
+            const mainResults = [];
+            const dessertResults = [];
+            const sweaterResults = [];
+            
+            currentDishes.forEach(dish => {
+                let voteCount = 0;
+                
+                Object.values(allVotes).forEach(userVotes => {
+                    if (dish.category === 'main' && Array.isArray(userVotes.main) && userVotes.main.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'dessert' && Array.isArray(userVotes.dessert) && userVotes.dessert.includes(dish.id)) {
+                        voteCount++;
+                    } else if (dish.category === 'sweater' && Array.isArray(userVotes.sweater) && userVotes.sweater.includes(dish.id)) {
+                        voteCount++;
+                    }
+                });
+                
+                const result = {
+                    Dish: dish.name,
+                    Contributor: dish.contributor,
+                    Votes: voteCount,
+                    Category: dish.category === 'main' ? 'Main Dish' : dish.category === 'dessert' ? 'Dessert' : 'Ugly Sweater'
+                };
+                
+                if (dish.category === 'main') {
+                    mainResults.push(result);
+                } else if (dish.category === 'dessert') {
+                    dessertResults.push(result);
+                } else if (dish.category === 'sweater') {
+                    sweaterResults.push(result);
+                }
+            });
+            
+            mainResults.sort((a, b) => b.Votes - a.Votes);
+            dessertResults.sort((a, b) => b.Votes - a.Votes);
+            sweaterResults.sort((a, b) => b.Votes - a.Votes);
+            
+            // Create CSV
+            const csv = [
+                ['MAIN DISHES'],
+                ['Rank', 'Dish', 'Contributor', 'Total Votes'],
+                ...mainResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes]),
+                [],
+                ['DESSERTS'],
+                ['Rank', 'Dish', 'Contributor', 'Total Votes'],
+                ...dessertResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes]),
+                [],
+                ['UGLY CHRISTMAS SWEATERS'],
+                ['Rank', 'Sweater', 'Owner', 'Total Votes'],
+                ...sweaterResults.map((r, i) => [i + 1, r.Dish, r.Contributor, r.Votes])
+            ].map(row => row.join(',')).join('\n');
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'potluck-results.csv';
+            a.click();
+        } catch (err) {
+            alert('Error exporting results');
+            console.error(err);
+        }
+    }
+    
+    async function addDish() {
+        const name = document.getElementById('newDishName').value.trim();
+        const contributor = document.getElementById('newDishContributor').value.trim();
+        const image = document.getElementById('newDishImage').value.trim();
+        const category = document.getElementById('newDishCategory').value;
+        
+        if (!name || !contributor) {
+            alert('Please enter both item name and person name');
+            return;
+        }
+        
+        try {
+            const data = await fetchGist();
+            const newId = Math.max(...data.dishes.map(d => d.id), 0) + 1;
+            data.dishes.push({ id: newId, name, contributor, image, category });
+            
+            await updateGist(data);
+            
+            document.getElementById('newDishName').value = '';
+            document.getElementById('newDishContributor').value = '';
+            document.getElementById('newDishImage').value = '';
+            document.getElementById('newDishCategory').value = 'main';
+            
+            alert('Item added successfully!');
+            await calculateAndDisplayResults();
+        } catch (err) {
+            alert('Error adding item');
+            console.error(err);
+        }
+    }
+    
+    async function clearAllVotes() {
+        if (confirm('Are you sure you want to clear ALL votes? This cannot be undone!')) {
+            try {
+                const data = await fetchGist();
+                data.votes = {};
+                await updateGist(data);
+                alert('All votes have been cleared.');
+                await calculateAndDisplayResults();
+            } catch (err) {
+                alert('Error clearing votes');
+                console.error(err);
+            }
+        }
+    }
+    
+    // Initialize on load
+    init();
+</script>

@@ -914,7 +914,7 @@
             }
         }
         
-        async function fetchGist() {
+  /*        async function fetchGist() {
             const response = await fetch(`https://api.github.com/gists/${CONFIG.gistId}`, {
                 headers: {
                     'Authorization': `token ${CONFIG.githubToken}`,
@@ -930,8 +930,10 @@
             const content = gist.files['potluck-votes.json'].content;
             return JSON.parse(content);
         }
+
         
-        async function updateGist(data) {
+        
+      async function updateGist(data) {
             const response = await fetch(`https://api.github.com/gists/${CONFIG.gistId}`, {
                 method: 'PATCH',
                 headers: {
@@ -953,8 +955,34 @@
             }
             
             return await response.json();
-        }
+        }*/
         
+        async function fetchGist() {
+  const response = await fetch("http://localhost:8080/api/readP");
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch JSON");
+  }
+
+  return await response.json();
+}
+
+async function updateGist(data) {
+  const response = await fetch("http://localhost:8080/api/createP", {
+    method: "post", // POST replaces the entire JSON blob
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data, null, 2)
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update JSON");
+  }
+
+  return await response.json();
+}
+
         function showSection(sectionId) {
             document.querySelectorAll('.login-section, .category-selection, .voting-section, .results-section, .setup-section, .thankyou-section').forEach(section => {
                 section.classList.remove('active');
