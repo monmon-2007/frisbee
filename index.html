@@ -914,7 +914,7 @@
             }
         }
         
-  /*        async function fetchGist() {
+          async function fetchGist() {
             const response = await fetch(`https://api.github.com/gists/${CONFIG.gistId}`, {
                 headers: {
                     'Authorization': `token ${CONFIG.githubToken}`,
@@ -955,9 +955,9 @@
             }
             
             return await response.json();
-        }*/
+        }
         
-        async function fetchGist() {
+      /*  async function fetchGist() {
   const response = await fetch("http://localhost:8080/api/readP");
 
   if (!response.ok) {
@@ -981,7 +981,7 @@ async function updateGist(data) {
   }
 
   return await response.json();
-}
+}*/
 
         function showSection(sectionId) {
             document.querySelectorAll('.login-section, .category-selection, .voting-section, .results-section, .setup-section, .thankyou-section').forEach(section => {
